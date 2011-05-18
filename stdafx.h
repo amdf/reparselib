@@ -4,7 +4,7 @@
  *
  * \section usage_sec Using
  *
- * ObjIdLib is a dynamic link library for Windows applications.
+ * ReparseLib is a dynamic link library for Windows applications.
  * File name is reparselib.dll.
  */
 #pragma once
