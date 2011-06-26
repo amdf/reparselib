@@ -28,6 +28,54 @@ static HANDLE OpenFileForRead(IN LPCWSTR sFileName, IN BOOL bBackup)
 }
 
 /**
+ *  @brief      Determine whether the file is a junction point
+ *  @param[in]  sFileName File name
+ *  @return     TRUE if the file is a junction point, FALSE otherwise
+ */
+REPARSELIB_API BOOL IsJunctionPoint(IN LPCWSTR sFileName)
+{
+  DWORD dwTag;
+  if (!ReparsePointExists(sFileName))
+  {
+    return FALSE;
+  } else
+  {
+    if (!GetReparseTag(sFileName, &dwTag))
+    {
+      return FALSE;
+    } else
+    {
+      // TODO: rewrite it to determine volume mount
+      //       points from directory junctions
+      return (IO_REPARSE_TAG_MOUNT_POINT == dwTag);
+    }
+  }
+}
+
+/**
+ *  @brief      Determine whether the file is a symbolic link
+ *  @param[in]  sFileName File name
+ *  @return     TRUE if the file is a symbolic link, FALSE otherwise
+ */
+REPARSELIB_API BOOL IsSymbolicLink(IN LPCWSTR sFileName)
+{
+  DWORD dwTag;
+  if (!ReparsePointExists(sFileName))
+  {
+    return FALSE;
+  } else
+  {
+    if (!GetReparseTag(sFileName, &dwTag))
+    {
+      return FALSE;
+    } else
+    {
+      return (IO_REPARSE_TAG_SYMLINK == dwTag);
+    }
+  }
+}
+
+/**
  *  @brief      Checks an existence of a Reparse Point of a specified file
  *  @param[in]  sFileName File name
  *  @return     TRUE if exists, FALSE otherwise

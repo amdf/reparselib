@@ -45,8 +45,8 @@ typedef struct _REPARSE_DATA_BUFFER {
 #endif
 
 REPARSELIB_API BOOL ReparsePointExists(IN LPCWSTR sFileName);
-REPARSELIB_API BOOL GetReparseGUID(IN LPCWSTR sFileName, GUID* pGuid);
-REPARSELIB_API BOOL GetReparseTag(IN LPCWSTR sFileName, DWORD* pTag);
+REPARSELIB_API BOOL GetReparseGUID(IN LPCWSTR sFileName, OUT GUID* pGuid);
+REPARSELIB_API BOOL GetReparseTag(IN LPCWSTR sFileName, OUT DWORD* pTag);
 REPARSELIB_API BOOL DeleteReparsePoint(IN LPCWSTR sFileName);
 REPARSELIB_API BOOL CreateCustomReparsePoint
 (
@@ -56,3 +56,6 @@ REPARSELIB_API BOOL CreateCustomReparsePoint
   IN GUID     uGuid,
   IN ULONG    uReparseTag
 );
+
+REPARSELIB_API BOOL IsSymbolicLink(IN LPCWSTR sFileName);
+REPARSELIB_API BOOL IsJunctionPoint(IN LPCWSTR sFileName);
