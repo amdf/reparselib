@@ -503,16 +503,16 @@ REPARSELIB_API BOOL GetSubstituteName(IN LPCWSTR sFileName, OUT LPWSTR sSubstitu
   switch (dwTag)
   {
     case IO_REPARSE_TAG_MOUNT_POINT:
-      if (uSubstituteNameLength >= pReparse->MountPointReparseBuffer.PrintNameLength)
+      if (uSubstituteNameLength >= pReparse->MountPointReparseBuffer.SubstituteNameLength)
       {
         memcpy
         (
           sSubstituteName,
           &pReparse->MountPointReparseBuffer.PathBuffer
           [
-            pReparse->MountPointReparseBuffer.PrintNameOffset / sizeof(wchar_t)
+            pReparse->MountPointReparseBuffer.SubstituteNameOffset / sizeof(wchar_t)
           ],
-          pReparse->MountPointReparseBuffer.PrintNameLength
+          pReparse->MountPointReparseBuffer.SubstituteNameLength
         );
       } else
       {
@@ -521,16 +521,16 @@ REPARSELIB_API BOOL GetSubstituteName(IN LPCWSTR sFileName, OUT LPWSTR sSubstitu
       }
     break;
     case IO_REPARSE_TAG_SYMLINK:
-      if (uSubstituteNameLength >= pReparse->SymbolicLinkReparseBuffer.PrintNameLength)
+      if (uSubstituteNameLength >= pReparse->SymbolicLinkReparseBuffer.SubstituteNameLength)
       {
         memcpy
         (
           sSubstituteName,
           &pReparse->SymbolicLinkReparseBuffer.PathBuffer
           [
-            pReparse->SymbolicLinkReparseBuffer.PrintNameOffset / sizeof(wchar_t)
+            pReparse->SymbolicLinkReparseBuffer.SubstituteNameOffset / sizeof(wchar_t)
           ],
-          pReparse->SymbolicLinkReparseBuffer.PrintNameLength
+          pReparse->SymbolicLinkReparseBuffer.SubstituteNameLength
         );
       } else
       {
