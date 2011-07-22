@@ -58,6 +58,7 @@ REPARSELIB_API BOOL CreateCustomReparsePoint
   IN ULONG    uReparseTag
 );
 REPARSELIB_API BOOL IsSymbolicLink(IN LPCWSTR sFileName);
+REPARSELIB_API BOOL IsSymbolicLinkRelative(IN LPCWSTR sFileName);
 REPARSELIB_API BOOL IsJunctionPoint(IN LPCWSTR sFileName);
 REPARSELIB_API BOOL IsMountPoint(IN LPCWSTR sFileName);
 REPARSELIB_API BOOL GetPrintName(IN LPCWSTR sFileName, OUT LPWSTR sPrintName, IN USHORT uPrintNameLength);

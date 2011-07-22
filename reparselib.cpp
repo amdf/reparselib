@@ -28,6 +28,37 @@ static HANDLE OpenFileForRead(IN LPCWSTR sFileName, IN BOOL bBackup)
 }
 
 
+/**
+ *  @brief      Determine whether the symbolic link is relative or not
+ *  @param[in]  sFileName File name
+ *  @return     TRUE if the link is relative, FALSE otherwise
+ *              FALSE if not a symbolic link
+ */
+REPARSELIB_API BOOL IsSymbolicLinkRelative(IN LPCWSTR sFileName)
+{
+  DWORD dwTag;
+  PREPARSE_DATA_BUFFER pReparse;
+  BOOL bResult = FALSE;
+
+  if (ReparsePointExists(sFileName))
+  {
+    if (GetReparseTag(sFileName, &dwTag))
+    {
+      if (IO_REPARSE_TAG_SYMLINK == dwTag)
+      {
+        pReparse = (PREPARSE_DATA_BUFFER)
+          GlobalAlloc(GPTR, MAXIMUM_REPARSE_DATA_BUFFER_SIZE);
+
+        GetReparseBuffer(sFileName, (PREPARSE_GUID_DATA_BUFFER)pReparse);
+
+        bResult = (pReparse->SymbolicLinkReparseBuffer.Flags | SYMLINK_FLAG_RELATIVE);
+
+        GlobalFree(pReparse);
+      }
+    }
+  }
+  return bResult;
+}
 
 /**
  *  @brief      Determine whether the file is a junction point
@@ -49,28 +80,14 @@ REPARSELIB_API BOOL IsJunctionPoint(IN LPCWSTR sFileName)
       // mount points and junction points
       if (IO_REPARSE_TAG_MOUNT_POINT == dwTag)
       {
-        pReparse = (PREPARSE_DATA_BUFFER)
-          GlobalAlloc(GPTR, MAXIMUM_REPARSE_DATA_BUFFER_SIZE);
-
-        GetReparseBuffer(sFileName, (PREPARSE_GUID_DATA_BUFFER)pReparse);
-        pChar = (PWCHAR) GlobalAlloc(GPTR, pReparse->MountPointReparseBuffer.PrintNameLength);
-        
-        memcpy
-        (
-          pChar,
-          &pReparse->MountPointReparseBuffer.PathBuffer
-          [
-            pReparse->MountPointReparseBuffer.PrintNameOffset / sizeof(wchar_t)
-          ],
-          pReparse->MountPointReparseBuffer.PrintNameLength
-        );
-
-        if (0 != wcsncmp(L"\\??\\Volume", pChar, 10))
+        pChar = (PWCHAR) GlobalAlloc(GPTR, 16 * 1024);
+        if (GetPrintName(sFileName, pChar, 16 * 1024))
         {
-          bResult = TRUE;
+          if (0 != wcsncmp(L"\\??\\Volume", pChar, 10))
+          {
+            bResult = TRUE;
+          }
         }
-
-        GlobalFree(pReparse);
         GlobalFree(pChar);
       }
     }
