@@ -51,7 +51,7 @@ REPARSELIB_API BOOL IsSymbolicLinkRelative(IN LPCWSTR sFileName)
 
         GetReparseBuffer(sFileName, (PREPARSE_GUID_DATA_BUFFER)pReparse);
 
-        bResult = (pReparse->SymbolicLinkReparseBuffer.Flags | SYMLINK_FLAG_RELATIVE);
+        bResult = (pReparse->SymbolicLinkReparseBuffer.Flags & SYMLINK_FLAG_RELATIVE);
 
         GlobalFree(pReparse);
       }
