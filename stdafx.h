@@ -17,3 +17,5 @@
 #include <windows.h>
 #include <ntndk.h>
 
+HANDLE OpenFileForWrite(IN LPCWSTR sFileName, IN BOOL bBackup);
+HANDLE OpenFileForRead(IN LPCWSTR sFileName, IN BOOL bBackup);

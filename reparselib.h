@@ -12,6 +12,8 @@
 #define REPARSELIB_API extern "C" __declspec(dllimport)
 #endif
 
+#define MAX_REPARSE_BUFFER 16*1024
+
 #ifndef REPARSE_DATA_BUFFER
 
 #define SYMLINK_FLAG_RELATIVE   1
@@ -44,6 +46,8 @@ typedef struct _REPARSE_DATA_BUFFER {
 
 #endif
 
+#define REPARSE_DATA_BUFFER_HEADER_SIZE FIELD_OFFSET(REPARSE_DATA_BUFFER,GenericReparseBuffer)
+
 REPARSELIB_API BOOL ReparsePointExists(IN LPCWSTR sFileName);
 REPARSELIB_API BOOL GetReparseBuffer(IN LPCWSTR sFileName, OUT PREPARSE_GUID_DATA_BUFFER pBuf);
 REPARSELIB_API BOOL GetReparseGUID(IN LPCWSTR sFileName, OUT GUID* pGuid);
@@ -63,3 +67,8 @@ REPARSELIB_API BOOL IsJunctionPoint(IN LPCWSTR sFileName);
 REPARSELIB_API BOOL IsMountPoint(IN LPCWSTR sFileName);
 REPARSELIB_API BOOL GetPrintName(IN LPCWSTR sFileName, OUT LPWSTR sPrintName, IN USHORT uPrintNameLength);
 REPARSELIB_API BOOL GetSubstituteName(IN LPCWSTR sFileName, OUT LPWSTR sSubstituteName, IN USHORT uSubstituteNameLength);
+
+REPARSELIB_API BOOL CreateSymlink(
+  IN LPCWSTR sLinkName, IN LPCWSTR sPrintName, IN LPCWSTR sSubstituteName, IN BOOL bRelative);
+REPARSELIB_API BOOL CreateJunction(
+  IN LPCWSTR sLinkName, IN LPCWSTR sPrintName, IN LPCWSTR sSubstituteName);
