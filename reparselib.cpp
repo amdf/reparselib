@@ -261,4 +261,3 @@ REPARSELIB_API BOOL CreateCustomReparsePoint
   
   return bResult;
 }
-

@@ -174,6 +174,7 @@ REPARSELIB_API BOOL GetPrintName(IN LPCWSTR sFileName, OUT LPWSTR sPrintName, IN
     case IO_REPARSE_TAG_MOUNT_POINT:
       if (uPrintNameLength >= pReparse->MountPointReparseBuffer.PrintNameLength)
       {
+        memset(sPrintName, 0, uPrintNameLength);
         memcpy
         (
           sPrintName,
@@ -192,6 +193,7 @@ REPARSELIB_API BOOL GetPrintName(IN LPCWSTR sFileName, OUT LPWSTR sPrintName, IN
     case IO_REPARSE_TAG_SYMLINK:
       if (uPrintNameLength >= pReparse->SymbolicLinkReparseBuffer.PrintNameLength)
       {
+        memset(sPrintName, 0, uPrintNameLength);
         memcpy
         (
           sPrintName,
@@ -261,6 +263,7 @@ REPARSELIB_API BOOL GetSubstituteName(IN LPCWSTR sFileName, OUT LPWSTR sSubstitu
     case IO_REPARSE_TAG_MOUNT_POINT:
       if (uSubstituteNameLength >= pReparse->MountPointReparseBuffer.SubstituteNameLength)
       {
+        memset(sSubstituteName, 0, uSubstituteNameLength);
         memcpy
         (
           sSubstituteName,
@@ -279,6 +282,7 @@ REPARSELIB_API BOOL GetSubstituteName(IN LPCWSTR sFileName, OUT LPWSTR sSubstitu
     case IO_REPARSE_TAG_SYMLINK:
       if (uSubstituteNameLength >= pReparse->SymbolicLinkReparseBuffer.SubstituteNameLength)
       {
+        memset(sSubstituteName, 0, uSubstituteNameLength);
         memcpy
         (
           sSubstituteName,
