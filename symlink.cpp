@@ -356,8 +356,8 @@ REPARSELIB_API BOOL IsJunctionPoint(IN LPCWSTR sFileName)
       // mount points and junction points
       if (IO_REPARSE_TAG_MOUNT_POINT == dwTag)
       {
-        pChar = (PWCHAR) GlobalAlloc(GPTR, 16 * 1024);
-        if (GetPrintName(sFileName, pChar, 16 * 1024))
+        pChar = (PWCHAR) GlobalAlloc(GPTR, MAX_REPARSE_BUFFER);
+        if (GetPrintName(sFileName, pChar, MAX_REPARSE_BUFFER))
         {
           if (0 != wcsncmp(L"\\??\\Volume", pChar, 10))
           {
@@ -390,8 +390,8 @@ REPARSELIB_API BOOL IsMountPoint(IN LPCWSTR sFileName)
       // mount points and junction points
       if (IO_REPARSE_TAG_MOUNT_POINT == dwTag)
       {
-        pChar = (PWCHAR) GlobalAlloc(GPTR, 16 * 1024);
-        if (GetPrintName(sFileName, pChar, 16 * 1024))
+        pChar = (PWCHAR) GlobalAlloc(GPTR, MAX_REPARSE_BUFFER);
+        if (GetSubstituteName(sFileName, pChar, MAX_REPARSE_BUFFER))
         {
           if (0 == wcsncmp(L"\\??\\Volume", pChar, 10))
           {

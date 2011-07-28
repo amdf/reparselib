@@ -9,13 +9,14 @@
  */
 #pragma once
 
-#include "targetver.h"
+
 
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_NO_STATUS
 
 #include <windows.h>
-#include <ntndk.h>
+#include <WinIoCtl.h>
+
 
 HANDLE OpenFileForWrite(IN LPCWSTR sFileName, IN BOOL bBackup);
 HANDLE OpenFileForRead(IN LPCWSTR sFileName, IN BOOL bBackup);
