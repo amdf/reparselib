@@ -9,8 +9,29 @@
 #include <ks.h> // because of GUID_NULL
 #include "reparselib.h"
 
+/**
+ *@brief Get restore privilege in case we don't have it.
+ *@param [in] bReadWrite Read and write? (if not, will use GENERIC_READ)
+ */
+VOID ObtainRestorePrivilege(IN BOOL bReadWrite)
+{
+  HANDLE hToken; TOKEN_PRIVILEGES tp;
+  OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, &hToken);
+  LookupPrivilegeValue(NULL,
+    (bReadWrite ? SE_RESTORE_NAME : SE_BACKUP_NAME),
+    &tp.Privileges[0].Luid);
+  tp.PrivilegeCount = 1;
+  tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+  AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(TOKEN_PRIVILEGES), NULL, NULL);
+  CloseHandle(hToken);
+}
+
 HANDLE OpenFileForWrite(IN LPCWSTR sFileName, IN BOOL bBackup)
 {
+  if(bBackup)
+  {
+    ObtainRestorePrivilege(TRUE);
+  }
   return CreateFile(
     sFileName, GENERIC_WRITE, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
     (bBackup)
@@ -20,6 +41,10 @@ HANDLE OpenFileForWrite(IN LPCWSTR sFileName, IN BOOL bBackup)
 
 HANDLE OpenFileForRead(IN LPCWSTR sFileName, IN BOOL bBackup)
 {
+  if(bBackup)
+  {
+    ObtainRestorePrivilege(FALSE);
+  }
   return CreateFile(
     sFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
     (bBackup)
